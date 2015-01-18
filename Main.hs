@@ -1,13 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Main where
 
-import Hippo.Core
-import Control.Applicative       ( (<$>) )
-import Data.List.Utils           ( addToAL )
-import Data.Maybe                ( fromMaybe )
-
-import Control.Monad.Error
 import Data.Text                 ( Text )
+import Hippo.Core
 
 import qualified Data.Map.Strict as M
 
