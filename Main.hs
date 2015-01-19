@@ -1,6 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Main where
 
+import Control.Applicative
+import Data.Maybe                ( catMaybes, fromMaybe, mapMaybe )
 import Data.Text                 ( Text )
 import Hippo.Core
 
@@ -52,13 +54,16 @@ structure =
 
 smallGraph :: Graph
 smallGraph = construct
-    [ ("employee",
-        [(35, [200, 111, 5, 6])
-        ])
-    , ("department", [])
+    [ ("department",
+        [(20,  [35,  8])
+      ])
     ]
 
 main :: IO ()
 main = do
-    let g = merge smallGraph graph structure
+--    let g = merge smallGraph graph structure
+--    print g
+    --let g = queryGraph graph [("employee", [1, 2, 35]), ("department", [20])]
+    let g = exQuery graph [("employee", [1, 2, 35]), ("department", [20])] structure
     print g
+

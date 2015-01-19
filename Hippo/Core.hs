@@ -3,10 +3,11 @@ module Hippo.Core
   ( Graph, Schema, keys, construct
   , Dict, DataStore, StoreItem(..)
   , dictKeys, dictFold, emptyDict, dsLookup
-  , merge
+  , merge, queryGraph, exQuery
   ) where
 
 import Control.Applicative
+import Data.Maybe                ( mapMaybe )
 import Data.List.Utils           ( addToAL )
 import Data.Maybe                ( fromMaybe )
 import Data.Text                 ( Text )
@@ -88,3 +89,21 @@ insMemb g t n xs =
 -- E.g., arrows struct "employee" => ["employee", "department", "@", "@"]
 arrows :: Schema -> Text -> [Text]
 arrows s t = snd <$> fromMaybe [] (lookup t s)
+
+-- ////////////////////////////////////////////////////////////////////////////
+-- Query
+-- ////////////////////////////////////////////////////////////////////////////
+
+queryGraph :: Graph             -- ^ Haystack
+           -> [(Text, [Int])]   -- ^ Query
+           -> Graph
+queryGraph hs = map $ \(t, xs) -> (t, M.fromList $ mapMaybe (f t) xs)
+  where
+    f :: Text -> Int -> Maybe (Int, [Int])
+    f t n = lookup' hs t n >>= \xs -> Just (n, xs)
+    lookup' :: Graph -> Text -> Int -> Maybe [Int]
+    lookup' g t n = lookup t g >>= M.lookup n
+
+exQuery :: Graph -> [(Text, [Int])] -> Schema -> Graph
+exQuery hs = flip merge hs . queryGraph hs
+
