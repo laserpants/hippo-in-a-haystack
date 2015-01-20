@@ -94,8 +94,10 @@ arrows s t = snd <$> fromMaybe [] (lookup t s)
 -- Query
 -- ////////////////////////////////////////////////////////////////////////////
 
-queryGraph :: Graph             -- ^ Haystack
-           -> [(Text, [Int])]   -- ^ Query
+type Query = [(Text, [Int])]
+
+queryGraph :: Graph    -- ^ Haystack
+           -> Query    -- ^ Query
            -> Graph
 queryGraph hs = map $ \(t, xs) -> (t, M.fromList $ mapMaybe (f t) xs)
   where
@@ -104,6 +106,6 @@ queryGraph hs = map $ \(t, xs) -> (t, M.fromList $ mapMaybe (f t) xs)
     lookup' :: Graph -> Text -> Int -> Maybe [Int]
     lookup' g t n = lookup t g >>= M.lookup n
 
-exQuery :: Graph -> [(Text, [Int])] -> Schema -> Graph
+exQuery :: Graph -> Query -> Schema -> Graph
 exQuery hs = flip merge hs . queryGraph hs
 
