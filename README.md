@@ -1,3 +1,3 @@
 # hippo-in-a-haystack
 
-Experimental in-memory database designed for multi-node data replication.
+Experimental in-memory data store designed for multi-node replication.
